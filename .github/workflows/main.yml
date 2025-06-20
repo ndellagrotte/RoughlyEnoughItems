@@ -1,0 +1,26 @@
+name: Java CI Builder
+on: [push]
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Set up JDK 21
+        uses: actions/setup-java@v4
+        with:
+          java-version: 21
+          distribution: temurin
+      - name: Build with Gradle
+        uses: gradle/gradle-build-action@v3
+        with:
+          arguments: clean build --stacktrace -x publish
+      - name: Upload Fabric mod
+        uses: actions/upload-artifact@v4
+        with:
+          name: REI-Fabric
+          path: fabric/build/libs/*.jar
+      - name: Upload NeoForge mod
+        uses: actions/upload-artifact@v4
+        with:
+          name: REI-NeoForge
+          path: neoforge/build/libs/*.jar
